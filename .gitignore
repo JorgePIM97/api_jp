@@ -1,0 +1,91 @@
+# ==========================================
+# ENTORNOS VIRTUALES
+# ==========================================
+venv/
+env/
+ENV/
+.venv/
+
+# ==========================================
+# VARIABLES DE ENTORNO Y SECRETOS
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# DJANGO
+# ==========================================
+# *.sqlite3
+# db.sqlite3
+
+# Archivos de logs
+*.log
+logs/
+
+# Archivos subidos por usuarios
+media/
+
+# Archivos estáticos recolectados
+staticfiles/
+
+# ==========================================
+# PYTHON
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos compilados de extensiones
+*.so
+*.pyd
+*.dll
+
+# ==========================================
+# TESTS Y COBERTURA
+# ==========================================
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# ==========================================
+# TYPE CHECKERS Y LINTERS
+# ==========================================
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# ==========================================
+# JUPYTER
+# ==========================================
+.ipynb_checkpoints/
+
+# ==========================================
+# IDE - VISUAL STUDIO CODE
+# ==========================================
+.vscode/
+
+# ==========================================
+# PYCHARM / INTELLIJ
+# ==========================================
+.idea/
+*.iml
+
+# ==========================================
+# SISTEMA OPERATIVO
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# BACKUPS Y ARCHIVOS TEMPORALES
+# ==========================================
+*.bak
+*.swp
+*.swo
+*~
