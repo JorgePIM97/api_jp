@@ -1,32 +1,33 @@
-from django.shortcuts import render
-
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework import status
 
 from .models import Producto
 from .serializers import ProductoSerializer
+from django.shortcuts import get_object_or_404
 
 
-# GET: Obtener todos los productos
-# POST: Crear un producto
-@api_view(['GET', 'POST'])
-def productos(request):
+class ProductosView(APIView):
 
-    # Obtener todos los productos
-    if request.method == 'GET':
+    # GET /api/productos/
+    def get(self, request):
 
         productos = Producto.objects.all()
 
-        serializer = ProductoSerializer(productos, many=True)
+        serializer = ProductoSerializer(
+            productos,
+            many=True
+        )
 
         return Response(serializer.data)
 
 
-    # Crear un producto
-    elif request.method == 'POST':
+    # POST /api/productos/
+    def post(self, request):
 
-        serializer = ProductoSerializer(data=request.data)
+        serializer = ProductoSerializer(
+            data=request.data
+        )
 
         if serializer.is_valid():
 
@@ -43,33 +44,30 @@ def productos(request):
         )
 
 
-# GET: Obtener un producto
-# PUT: Actualizar un producto
-# DELETE: Eliminar un producto
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def producto_detalle(request, id):
+class ProductoDetalleView(APIView):
 
-    try:
-        producto = Producto.objects.get(id=id)
+    def get_object(self, id):
 
-    except Producto.DoesNotExist:
-
-        return Response(
-            {"error": "Producto no encontrado"},
-            status=status.HTTP_404_NOT_FOUND
+        return get_object_or_404(
+            Producto,
+            id=id
         )
 
 
-    # GET: Obtener un producto
-    if request.method == 'GET':
+    # GET /api/productos/<id>/
+    def get(self, request, id):
+
+        producto = self.get_object(id)
 
         serializer = ProductoSerializer(producto)
 
         return Response(serializer.data)
 
 
-    # PUT: Actualizar completamente
-    elif request.method == 'PUT':
+    # PUT /api/productos/<id>/
+    def put(self, request, id):
+
+        producto = self.get_object(id)
 
         serializer = ProductoSerializer(
             producto,
@@ -88,8 +86,10 @@ def producto_detalle(request, id):
         )
 
 
-    # PATCH: Actualizar parcialmente
-    elif request.method == 'PATCH':
+    # PATCH /api/productos/<id>/
+    def patch(self, request, id):
+
+        producto = self.get_object(id)
 
         serializer = ProductoSerializer(
             producto,
@@ -109,8 +109,10 @@ def producto_detalle(request, id):
         )
 
 
-    # DELETE: Eliminar un producto
-    elif request.method == 'DELETE':
+    # DELETE /api/productos/<id>/
+    def delete(self, request, id):
+
+        producto = self.get_object(id)
 
         producto.delete()
 
