@@ -2,8 +2,17 @@ from rest_framework import serializers
 
 from .models import Producto, Categoria
 
+class ProductoSimpleSerializer(serializers.ModelSerializer):
 
-class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = [
+            'id',
+            'nombre',
+            'precio'
+        ]
+
+class CategoriaSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Categoria
@@ -12,8 +21,32 @@ class CategoriaSerializer(serializers.ModelSerializer):
             'nombre'
         ]
 
+class CategoriaSerializer(serializers.ModelSerializer):
+
+    productos = ProductoSimpleSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Categoria
+        fields = [
+            'id',
+            'nombre',
+            'productos'
+        ]
 
 class ProductoSerializer(serializers.ModelSerializer):
+
+    categoria = CategoriaSimpleSerializer(
+        read_only=True
+    )
+
+    categoria_id = serializers.PrimaryKeyRelatedField(
+        queryset=Categoria.objects.all(),
+        source='categoria',
+        write_only=True
+    )
 
     class Meta:
         model = Producto
@@ -21,7 +54,8 @@ class ProductoSerializer(serializers.ModelSerializer):
             'id',
             'nombre',
             'precio',
-            'categoria'
+            'categoria',
+            'categoria_id'
         ]
 
     def validate_precio(self, value):
@@ -41,3 +75,18 @@ class ProductoSerializer(serializers.ModelSerializer):
             )
 
         return value
+
+class CategoriaDetalleSerializer(serializers.ModelSerializer):
+
+    productos = ProductoSimpleSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Categoria
+        fields = [
+            'id',
+            'nombre',
+            'productos'
+        ]

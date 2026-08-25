@@ -1,9 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Producto, Categoria
+
 from .serializers import (
     ProductoSerializer,
-    CategoriaSerializer
+    CategoriaSimpleSerializer,
+    CategoriaDetalleSerializer
 )
 
 
@@ -16,4 +18,10 @@ class ProductoViewSet(ModelViewSet):
 class CategoriaViewSet(ModelViewSet):
 
     queryset = Categoria.objects.all()
-    serializer_class = CategoriaSerializer
+
+    def get_serializer_class(self):
+
+        if self.action == 'retrieve':
+            return CategoriaDetalleSerializer
+
+        return CategoriaSimpleSerializer
